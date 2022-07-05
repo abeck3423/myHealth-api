@@ -9,7 +9,7 @@ const usersController = require("./Controllers/users.js");
 const cors = require("cors");
 
 // Define port
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8080;
 
 // Create express app
 const app = express();
@@ -35,7 +35,7 @@ app.use("/profiles", profilesController);
 // Users routes
 app.use("/users", usersController);
 
-app.set("port", process.env.PORT || 8080);
+app.set("port", PORT);
 
 // Start app on port
 app.listen(PORT, () => {
