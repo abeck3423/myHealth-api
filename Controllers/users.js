@@ -1,38 +1,27 @@
 const express = require("express");
 const User = require("../Models/user.js");
 const router = express.Router();
+const { registerValidation } = require("../db/validation.js");
 // const bcrypt = require("bcryptjs");
 // const jwt = require("jsonwebtoken");
 
-//Validation
-const Joi = require("@hapi/joi");
-
-const schema = Joi.object({
-  firstName: Joi.string().min(4).required(),
-  lastName: Joi.string().min(4).required(),
-  email: Joi.string().min(4).required().email(),
-  password: Joi.string().min(4).required(),
-});
 //Register user
 router.post("/register", async (req, res) => {
-  //get new user data
-  //   const salt = await bcrypt.genSalt(10);
-  //   const hashPw = await bcrypt.hash(req.body.password, salt);
   //Validate the data before making a user
-  const validation = schema.validate(req.body);
-  res.send(validation);
+  const { error } = registerValidation(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
 
-  //   const userObj = {
-  //     firstName: req.body.firstName,
-  //     lastName: req.body.lastName,
-  //     email: req.body.email,
-  //     password: req.body.password,
-  //   };
-  //   //Save user to db
-  //   User.create(userObj).then((user) => {
-  //     res.status(201).json({ user: user });
-  //     console.log(user);
-  //   });
+  const userObj = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    password: req.body.password,
+  };
+  //Save user to db
+  User.create(userObj).then((user) => {
+    res.status(201).json({ user: user });
+    console.log(user);
+  });
 });
 
 // //Login
