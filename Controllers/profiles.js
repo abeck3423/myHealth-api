@@ -8,7 +8,7 @@ router.get("/", function (req, res) {
   // Find all the profiles
   Profile.find({})
     // Return profiles as json
-    .populate("user", ["firstName", "lastName", "email", "password"])
+    // .populate("user", ["firstName", "lastName", "email", "password"])
     .then((profiles) => res.status(200).json({ profiles: profiles }));
 });
 
@@ -29,7 +29,7 @@ router.get("/:id", function (req, res) {
   //Find profile by id
   Profile.findById(id)
     //Return profile as json
-    .populate("user", ["firstName", "lastName", "email", "password"])
+    // .populate("user", ["firstName", "lastName", "email", "password"])
     .then((profile) => res.status(200).json({ profile: profile }));
   console.log(id);
 });
@@ -46,7 +46,7 @@ router.delete("/:id", (req, res) => {
 router.patch("/:id", (req, res) => {
   //Find profile by id and update
   Profile.findByIdAndUpdate(req.params.id, req.body, { new: true })
-    .populate("user", ["firstName", "lastName", "email", "password"])
+    // .populate("user", ["firstName", "lastName", "email", "password"])
     .then((profile) => {
       res.json({ data: profile });
     });

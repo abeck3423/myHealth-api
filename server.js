@@ -5,8 +5,9 @@ const logger = require("morgan");
 const insurancesController = require("./Controllers/insurances.js");
 const prescriptionsController = require("./Controllers/prescriptions.js");
 const profilesController = require("./Controllers/profiles.js");
-const usersController = require("./Controllers/users.js");
+// const usersController = require("./Controllers/users.js");
 const cors = require("cors");
+const authRoute = require("./Controllers/users.js");
 
 // Define port
 const PORT = process.env.PORT || 8080;
@@ -33,7 +34,7 @@ app.use("/prescriptions", prescriptionsController);
 app.use("/profiles", profilesController);
 
 // Users routes
-app.use("/users", usersController);
+app.use("/users", authRoute);
 
 app.set("port", PORT);
 

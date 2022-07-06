@@ -8,7 +8,7 @@ router.get("/", function (req, res) {
   // Find all the insurances
   Insurance.find({})
     // Return insurances as json
-    .populate("user", ["firstName", "lastName", "email", "password"])
+    // .populate("user", ["firstName", "lastName", "email", "password"])
     .then((insurances) => res.status(200).json({ insurances: insurances }));
 });
 
@@ -29,7 +29,7 @@ router.get("/:id", function (req, res) {
   //Find insurance by id
   Insurance.findById(id)
     //Return insurance as json
-    .populate("user", ["firstName", "lastName", "email", "password"])
+    // .populate("user", ["firstName", "lastName", "email", "password"])
     .then((insurance) => res.status(200).json({ insurance: insurance }));
   console.log(id);
 });
@@ -46,7 +46,7 @@ router.delete("/:id", (req, res) => {
 router.patch("/:id", (req, res) => {
   //Find insurance by id and update
   Insurance.findByIdAndUpdate(req.params.id, req.body, { new: true })
-    .populate("user", ["firstName", "lastName", "email", "password"])
+    // .populate("user", ["firstName", "lastName", "email", "password"])
     .then((insurance) => {
       res.json({ data: insurance });
     });
