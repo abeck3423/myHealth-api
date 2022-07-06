@@ -1,10 +1,11 @@
 const express = require("express");
 const Prescription = require("../Models/prescription.js");
+const verify = require("../db/verifyToken");
 
 const router = express.Router();
 
 // GET /prescriptions
-router.get("/", function (req, res) {
+router.get("/", verify, function (req, res) {
   // Find all the prescriptions
   Prescription.find({})
     // Return prescriptions as json
@@ -15,7 +16,7 @@ router.get("/", function (req, res) {
 });
 
 // POST /prescription
-router.post("/", function (req, res) {
+router.post("/", verify, function (req, res) {
   // get new prescription data
   const data = req.body;
   // save prescription to db
@@ -26,7 +27,7 @@ router.post("/", function (req, res) {
 });
 
 // GET /:id
-router.get("/:id", function (req, res) {
+router.get("/:id", verify, function (req, res) {
   const id = req.params.id;
   //Find prescription by id
   Prescription.findById(id)
@@ -39,7 +40,7 @@ router.get("/:id", function (req, res) {
 });
 
 // DELETE /:id
-router.delete("/:id", (req, res) => {
+router.delete("/:id", verify, (req, res) => {
   //Find prescription by id and delete
   Prescription.findByIdAndDelete(req.params.id).then((prescription) => {
     res.json({ data: prescription });
@@ -47,7 +48,7 @@ router.delete("/:id", (req, res) => {
 });
 
 // PATCH /:id
-router.patch("/:id", (req, res) => {
+router.patch("/:id", verify, (req, res) => {
   //Find prescription by id and update
   Prescription.findByIdAndUpdate(req.params.id, req.body, { new: true })
     // .populate("user", ["firstName", "lastName", "email", "password"])

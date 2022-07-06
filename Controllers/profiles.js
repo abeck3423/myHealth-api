@@ -1,10 +1,11 @@
 const express = require("express");
 const Profile = require("../Models/profile.js");
+const verify = require("../db/verifyToken");
 
 const router = express.Router();
 
 // GET /profiles
-router.get("/", function (req, res) {
+router.get("/", verify, function (req, res) {
   // Find all the profiles
   Profile.find({})
     // Return profiles as json
@@ -13,7 +14,7 @@ router.get("/", function (req, res) {
 });
 
 // POST /profiles
-router.post("/", function (req, res) {
+router.post("/", verify, function (req, res) {
   // get new profile data
   const data = req.body;
   // save profile to db
@@ -24,7 +25,7 @@ router.post("/", function (req, res) {
 });
 
 // GET /:id
-router.get("/:id", function (req, res) {
+router.get("/:id", verify, function (req, res) {
   const id = req.params.id;
   //Find profile by id
   Profile.findById(id)
@@ -35,7 +36,7 @@ router.get("/:id", function (req, res) {
 });
 
 // DELETE /:id
-router.delete("/:id", (req, res) => {
+router.delete("/:id", verify, (req, res) => {
   //Find profile by id and delete
   Profile.findByIdAndDelete(req.params.id).then((profile) => {
     res.json({ data: profile });
@@ -43,7 +44,7 @@ router.delete("/:id", (req, res) => {
 });
 
 // PATCH /:id
-router.patch("/:id", (req, res) => {
+router.patch("/:id", verify, (req, res) => {
   //Find profile by id and update
   Profile.findByIdAndUpdate(req.params.id, req.body, { new: true })
     // .populate("user", ["firstName", "lastName", "email", "password"])

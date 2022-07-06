@@ -1,10 +1,11 @@
 const express = require("express");
 const Insurance = require("../Models/insurance.js");
+const verify = require("../db/verifyToken");
 
 const router = express.Router();
 
 // GET /insurances
-router.get("/", function (req, res) {
+router.get("/", verify, function (req, res) {
   // Find all the insurances
   Insurance.find({})
     // Return insurances as json
@@ -13,7 +14,7 @@ router.get("/", function (req, res) {
 });
 
 // POST /insurances
-router.post("/", function (req, res) {
+router.post("/", verify, function (req, res) {
   // get new insurance data
   const data = req.body;
   // save insurances to db
@@ -24,7 +25,7 @@ router.post("/", function (req, res) {
 });
 
 // GET /:id
-router.get("/:id", function (req, res) {
+router.get("/:id", verify, function (req, res) {
   const id = req.params.id;
   //Find insurance by id
   Insurance.findById(id)
@@ -35,7 +36,7 @@ router.get("/:id", function (req, res) {
 });
 
 // DELETE /:id
-router.delete("/:id", (req, res) => {
+router.delete("/:id", verify, (req, res) => {
   //Find insurance by id and delete
   Insurance.findByIdAndDelete(req.params.id).then((insurance) => {
     res.json({ data: insurance });
@@ -43,7 +44,7 @@ router.delete("/:id", (req, res) => {
 });
 
 // PATCH /:id
-router.patch("/:id", (req, res) => {
+router.patch("/:id", verify, (req, res) => {
   //Find insurance by id and update
   Insurance.findByIdAndUpdate(req.params.id, req.body, { new: true })
     // .populate("user", ["firstName", "lastName", "email", "password"])
