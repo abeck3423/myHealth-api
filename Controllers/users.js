@@ -1,7 +1,7 @@
 const express = require("express");
 const User = require("../Models/user.js");
 const router = express.Router();
-const { registerValidation } = require("../db/validation.js");
+const { registerValidation, loginValidation } = require("../db/validation.js");
 const bcrypt = require("bcryptjs");
 // const jwt = require("jsonwebtoken");
 
@@ -28,20 +28,24 @@ router.post("/register", async (req, res) => {
   };
   //Save user to db
   User.create(userObj).then((user) => {
-    res.status(201).json({ user: user });
+    res.status(201).json({ user: user._id });
     console.log(user);
   });
 });
 
 // //Login
-// router.post("/login", async (req, res) => {
-//   //Find all users
-//   const user = await User.findOne({ email: req.body.email });
-//   const validPass = await bcrypt.compare(req.body.passord, user.password);
-//   console.log(user, req.body.email, "valid:", validPass);
-//   if (!user || !validPass)
-//     res.status(400).send("Email or password is incorrect");
-//   if (user && validPass) res.status(200).send("logged in");
-// });
+router.post("/login", async (req, res) => {
+  //Validate the data before making a user
+  const { error } = loginValidation(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+  //Checking if the email exists
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) return res.status(400).send("Email is not found");
+  //Password is correct
+  const validPass = await bcrypt.compare(req.body.password, user.password);
+  if (!validPass) return res.status(400).send("Invalid password");
+
+  res.send("Logged in!");
+});
 
 module.exports = router;
